@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createWeb3Modal } from '@web3modal/wagmi/react'
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
 import { PropsWithChildren } from 'react'
-import { WagmiProvider, http } from 'wagmi'
+import { WagmiProvider } from 'wagmi'
 import { mainnet } from 'wagmi/chains'
 
 const queryClient = new QueryClient()
@@ -20,9 +20,9 @@ const config = defaultWagmiConfig({
   chains,
   projectId,
   metadata,
-  transports: {
-    [mainnet.id]: http(`https://virtual.mainnet.rpc.tenderly.co/0515d3e6-c8d3-4103-ba1a-18a86d98df73`),
-  },
+//   transports: {
+//     [mainnet.id]: http(`https://virtual.mainnet.rpc.tenderly.co/0515d3e6-c8d3-4103-ba1a-18a86d98df73`),
+//   },
 })
 
 createWeb3Modal({
