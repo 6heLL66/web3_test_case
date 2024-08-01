@@ -72,7 +72,7 @@ export const TokenInput = ({ title, token, value, onChange, disabled, balance, e
       </Typography>
       <TextField
         label={token}
-        value={value || ''}
+        value={value ?? ''}
         error={error === ErrorTypes.Empty}
         placeholder='0'
         onChange={e => onChange?.(+e.target.value.replace(/-/, ''))}
