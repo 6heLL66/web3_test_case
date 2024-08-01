@@ -1,6 +1,7 @@
-import { Box, InputAdornment, TextField, Typography } from '@mui/material'
+import { Box, CircularProgress, InputAdornment, TextField, Typography } from '@mui/material'
+import { useCallback, useEffect, useState } from 'react'
 
-import { TOKEN_ICONS, Token } from '../constants'
+import { TOKEN_ADDRESS, TOKEN_ICONS, Token } from '../constants'
 
 export enum ErrorTypes {
   Empty,
@@ -18,6 +19,42 @@ type Props = {
 }
 
 export const TokenInput = ({ title, token, value, onChange, disabled, balance, error }: Props) => {
+  const [cost, setCost] = useState<string>('')
+  const [loadingPrice, setLoadingPrice] = useState(false)
+
+  const calculateCost = useCallback(() => {
+    if (!value) {
+      setCost('0')
+      return
+    }
+
+    setLoadingPrice(true)
+    fetch(
+      `https://deep-index.moralis.io/api/v2.2/erc20/${TOKEN_ADDRESS[token]}/price?chain=eth&include=percent_change`,
+      {
+        headers: {
+          Accept: 'application/json',
+          'X-API-Key': import.meta.env.VITE_MORALIS_API_KEY,
+        },
+      },
+    )
+      .then(res => res.json())
+      .then(({ usdPrice }) => {
+        setCost((usdPrice * value).toFixed(2))
+      })
+      .finally(() => {
+        setLoadingPrice(false)
+      })
+  }, [value])
+
+  useEffect(() => {
+    let timeout = setTimeout(calculateCost, 500)
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [calculateCost])
+
   return (
     <Box
       sx={{
@@ -52,7 +89,13 @@ export const TokenInput = ({ title, token, value, onChange, disabled, balance, e
           Balance: {balance ?? '0'}
         </Typography>
         <Typography color='GrayText' fontSize='10px'>
-          {}
+          {loadingPrice ? (
+            <CircularProgress size={8} />
+          ) : (
+            <Typography color='GrayText' fontSize='10px'>
+              ${cost}
+            </Typography>
+          )}
         </Typography>
       </Box>
     </Box>
