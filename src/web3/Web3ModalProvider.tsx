@@ -21,7 +21,7 @@ const config = defaultWagmiConfig({
   projectId,
   metadata,
   transports: {
-    [mainnet.id]: http(`https://virtual.mainnet.rpc.tenderly.co/ed0d2ba6-9b9d-4532-b69f-227a23c0ba8f`),
+    [mainnet.id]: http(`https://virtual.mainnet.rpc.tenderly.co/0515d3e6-c8d3-4103-ba1a-18a86d98df73`),
   },
 })
 
